@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignupPage() {
     const [name, setName] = useState('');
@@ -31,10 +31,11 @@ export default function SignupPage() {
                         <span className="text-sm text-gray-400">infotech</span>
                     </div>
                 </div>
-                <button className="px-4 py-2 bg-lime-500 text-black rounded-md hover:bg-lime-600 transition-colors"
-                    onClick={() => window.location.href = '/login'}>
+                <Link to="/login">
+                <button className="px-4 py-2 bg-lime-500 text-black rounded-md hover:bg-lime-600 transition-colors">
                     Login
                 </button>
+                </Link>
             </nav>
             <div className="flex-grow flex flex-col md:flex-row">
                 <div className="absolute bottom-10 right-3/4 w-96 h-96 bg-gradient-to-tr from-lime-500 to-transparent rounded-full filter blur-xl opacity-50 transform translate-x-3 translate-y-3 "></div>
@@ -114,7 +115,7 @@ export default function SignupPage() {
                                 >
                                     Register
                                 </button>
-                                <a href="/login" className="text-sm text-gray-400 hover:underline">
+                                <a href="https://mern-invoice-gen-frontend.vercel.app/login" className="text-sm text-gray-400 hover:underline">
                                     Already have account ?
                                 </a>
                             </div>
