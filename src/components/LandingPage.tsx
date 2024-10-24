@@ -8,7 +8,7 @@ export default function LandingPage() {
           </div>
           <button
             className="bg-lime-500 hover:bg-lime-600 text-black px-8 py-1 rounded-full text-lg"
-            onClick={() => window.location.href = '/login'}
+            onClick={() => window.location.href = 'https://mern-invoice-gen-frontend.vercel.app/login'}
           >
             Login
           </button>
@@ -22,7 +22,7 @@ export default function LandingPage() {
         </p>
         <button
           className="bg-gray-800 hover:bg-gray-950 text-lime-500 px-8 py-3 rounded-full text-lg"
-          onClick={() => window.location.href = '/signup'}
+          onClick={() => window.location.href = 'https://mern-invoice-gen-frontend.vercel.app/signup'}
         >
           Get Started
         </button>
