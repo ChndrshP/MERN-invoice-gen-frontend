@@ -115,9 +115,9 @@ export default function SignupPage() {
                                 >
                                     Register
                                 </button>
-                                <a href="https://mern-invoice-gen-frontend.vercel.app/login" className="text-sm text-gray-400 hover:underline">
-                                    Already have account ?
-                                </a>
+                                <Link to="/login" className="text-sm text-gray-400 hover:underline">
+                                    Already have an account?
+                                </Link>
                             </div>
                         </form>
                     </div>
