@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900 text-white">
@@ -6,12 +8,13 @@ export default function LandingPage() {
             <div className="flex items-center space-x-2 underline">
             <span className="text-xl font-bold">Levitation InfoTech</span>
           </div>
+          <Link to={"/login"}> 
           <button
             className="bg-lime-500 hover:bg-lime-600 text-black px-8 py-1 rounded-full text-lg"
-            onClick={() => window.location.href = 'https://mern-invoice-gen-frontend.vercel.app/login'}
           >
             Login
           </button>
+          </Link>
         </nav>
       </header>
 
@@ -20,12 +23,13 @@ export default function LandingPage() {
         <p className="text-xl md:text-2xl mb-12 max-w-2xl mx-auto">
         Levitation™ helps Government, MSME’s and Large Enterprises with custom software development like CRM, ERP, HIS, RMS etc
         </p>
+        <Link to={"/signup"}>
         <button
           className="bg-gray-800 hover:bg-gray-950 text-lime-500 px-8 py-3 rounded-full text-lg"
-          onClick={() => window.location.href = 'https://mern-invoice-gen-frontend.vercel.app/signup'}
         >
           Get Started
         </button>
+        </Link>
       </main>
 
       <footer className="absolute bottom-0 w-full py-6 text-center text-gray-400">
