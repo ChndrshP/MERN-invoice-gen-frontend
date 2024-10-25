@@ -10,12 +10,18 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-        await axios.post('https://mern-invoice-gen-api.onrender.com/api/auth/login', { email, password });
-        console.log('Form submitted:', { email, password });
-        navigate('/add-products');
+        const response = await axios.post('https://mern-invoice-gen-api.onrender.com/api/auth/login', { email, password });
+
+        if(response.data.token){
+          localStorage.setItem('token', response.data.token);
+          console.log('Form submitted:', { email, password });
+          navigate('/add-products');
+        }else{
+          alert('Invalid Credentials');
+        }
     } catch (error) {
         console.error('Signup failed', error);
-    }
+    } 
 };
 
   return (

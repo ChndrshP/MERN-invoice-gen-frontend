@@ -12,6 +12,8 @@ export default function AddProductsPage() {
   const [quantity, setQuantity] = useState('')
   const [products, setProducts] = useState<Product[]>([])
 
+  const token = localStorage.getItem('token');
+
   const handleAddProduct = () => {
     if (productName && productPrice && quantity) {
       const newProduct: Product = {
@@ -41,11 +43,17 @@ export default function AddProductsPage() {
       gst: calculateGST(),
     };
 
+    if(!token){
+      alert('You need to login first');
+      return;
+    }
+
     try {
       const response = await fetch("https://mern-invoice-gen-api.onrender.com/api/auth/generate-pdf", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       });
