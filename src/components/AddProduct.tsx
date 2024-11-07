@@ -145,8 +145,7 @@ export default function AddProductsPage() {
         )}
         <Link to={"/login"}>
           <button 
-            className="bg-lime-500 text-black px-4 py-2 rounded hover:bg-lime-600 transition-colors"
-            onClick={() => window.location.href = '/login'}>
+            className="bg-lime-500 text-black px-4 py-2 rounded hover:bg-lime-600 transition-colors">
             Logout
           </button>
         </Link>
