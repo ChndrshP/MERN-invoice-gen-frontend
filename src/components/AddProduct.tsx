@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from "react-router-dom"
 
 interface Product {
   name: string
@@ -6,13 +7,44 @@ interface Product {
   price: number
 }
 
+interface UserDetails {
+  name: string
+  email: string
+}
+
 export default function AddProductsPage() {
   const [productName, setProductName] = useState('')
   const [productPrice, setProductPrice] = useState('')
   const [quantity, setQuantity] = useState('')
   const [products, setProducts] = useState<Product[]>([])
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null)
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token')
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await fetch('https://mern-invoice-gen-api.onrender.com/api/auth/user', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch user details');
+        }
+        
+        const data = await response.json();
+        setUserDetails(data);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    if (token) {
+      fetchUserDetails();
+    }
+  }, [token]);
 
   const handleAddProduct = () => {
     if (productName && productPrice && quantity) {
@@ -37,16 +69,23 @@ export default function AddProductsPage() {
   }
 
   const handleGeneratePDF = async () => {
+    if(!token || !userDetails){
+      alert('You need to login first');
+      return;
+    }
+
+    const currentDate = new Date().toISOString().split('T')[0];
+
     const data = {
+      customer: {
+        name: userDetails.name,
+        email: userDetails.email,
+        date: currentDate
+      },
       products: products,
       total: calculateTotal(),
       gst: calculateGST(),
     };
-
-    if(!token){
-      alert('You need to login first');
-      return;
-    }
 
     try {
       const response = await fetch("https://mern-invoice-gen-api.onrender.com/api/auth/generate-pdf", {
@@ -99,9 +138,18 @@ export default function AddProductsPage() {
             <span className="text-sm text-gray-400">infotech</span>
           </div>
         </div>
-        <button className="bg-lime-500 text-black px-4 py-2 rounded hover:bg-lime-600 transition-colors"
-          onClick={() => window.location.href = '/login'}>Logout</button>
-        <div className="absolute top-100 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-bl from-purple-500 to-transparent rounded-full filter blur-3xl opacity-25"></div>
+        {userDetails && (
+          <div className="text-gray-400">
+            Welcome, {userDetails.name}
+          </div>
+        )}
+        <Link to={"/login"}>
+          <button 
+            className="bg-lime-500 text-black px-4 py-2 rounded hover:bg-lime-600 transition-colors"
+            onClick={() => window.location.href = '/login'}>
+            Logout
+          </button>
+        </Link>
       </header>
 
       <main className="container mx-auto px-4 py-8">
@@ -187,7 +235,9 @@ export default function AddProductsPage() {
         </div>
 
         <div className="mt-8 text-center">
-          <button className="bg-gray-700 text-lime-500 px-64 py-3 rounded hover:bg-gray-600 transition-colors font-bold" onClick={handleGeneratePDF}>
+          <button 
+            className="bg-gray-700 text-lime-500 px-64 py-3 rounded hover:bg-gray-600 transition-colors font-bold" 
+            onClick={handleGeneratePDF}>
             Generate PDF Invoice
           </button>
         </div>
