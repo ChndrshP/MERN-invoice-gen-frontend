@@ -1,12 +1,35 @@
 import { useState } from 'react'
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 export default function AddProductsPage() {
-  const [productName, setProductName] = useState('')
-  const [productPrice, setProductPrice] = useState('')
-  const [quantity, setQuantity] = useState('')
-  const [products, setProducts] = useState([])
-  const [customerDetails, setCustomerDetails] = useState({ name: '', email: '' })
+  const [productName, setProductName] = useState('');
+  const [productPrice, setProductPrice] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [products, setProducts] = useState([]);
+  const [customerDetails, setCustomerDetails] = useState({ name: '', email: '' });
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      localStorage.removeItem('token');
+
+      sessionStorage.clear();
+
+      document.cookie.split(";").forEach((cookie) => {
+        document.cookie = cookie
+          .replace(/^ +/, "")
+          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+      });
+
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const handleAddProduct = () => {
     if (productName && productPrice && quantity) {
@@ -100,12 +123,13 @@ export default function AddProductsPage() {
             <span className="text-sm text-gray-400">infotech</span>
           </div>
         </div>
-        <Link to={"/login"}>
-          <button
-            className="bg-lime-500 text-black px-4 py-2 rounded hover:bg-lime-600 transition-colors">
-            Logout
-          </button>
-        </Link>
+        <button
+          onClick={handleLogout}
+          disabled={isLoading}
+          className="bg-lime-500 text-black px-4 py-2 rounded hover:bg-lime-600 transition-colors disabled:bg-lime-300 disabled:cursor-not-allowed"
+        >
+          {isLoading ? 'Logging out...' : 'Logout'}
+        </button>
       </header>
 
       <main className="container mx-auto px-4 py-8">
